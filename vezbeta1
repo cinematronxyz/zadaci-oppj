@@ -7,7 +7,6 @@ typedef struct {
     int kapacitet;
 } DinamickiNiz;
 
-// Inicijalizacija niza sa početnim kapacitetom od 10
 DinamickiNiz* kreirajNiz() {
     DinamickiNiz *dn = (DinamickiNiz*)malloc(sizeof(DinamickiNiz));
     dn->kapacitet = 10;
@@ -16,41 +15,43 @@ DinamickiNiz* kreirajNiz() {
     return dn;
 }
 
-// Udvostručavanje kapaciteta kada se niz popuni
 void prosiriNiz(DinamickiNiz *dn) {
     dn->kapacitet *= 2;
     dn->niz = (int*)realloc(dn->niz, dn->kapacitet * sizeof(int));
     if (dn->niz == NULL) {
-        printf("Greška pri alokaciji memorije!\n");
+        printf("Greska pri alokaciji memorije!\n");
         exit(1);
     }
-    printf("Kapacitet niza proširen na %d elemenata.\n", dn->kapacitet);
+    printf("Kapacitet niza prosiren na %d elemenata.\n", dn->kapacitet);
 }
 
-// Ispis svih elemenata niza
 void ispisNiza(DinamickiNiz *dn) {
     if (dn->velicina == 0) {
         printf("Niz je prazan.\n");
         return;
     }
-    printf("Elementi niza [%d/%d]: ", dn->velicina, dn->kapacitet);
+    printf("Elementi niza [velicina: %d | kapacitet: %d]: ", dn->velicina, dn->kapacitet);
     for (int i = 0; i < dn->velicina; i++) {
         printf("%d ", dn->niz[i]);
     }
     printf("\n");
 }
 
-// Ispis elementa na zadatom indeksu
-void ispisElementa(DinamickiNiz *dn, int indeks) {
+void ispisElementa(DinamickiNiz *dn) {
+    int indeks;
+    printf("Unesite indeks: ");
+    scanf("%d", &indeks);
     if (indeks < 0 || indeks >= dn->velicina) {
-        printf("Greška: indeks %d je van opsega!\n", indeks);
+        printf("Greska: indeks %d je van opsega!\n", indeks);
         return;
     }
     printf("Element na indeksu %d: %d\n", indeks, dn->niz[indeks]);
 }
 
-// Dodavanje elementa na kraj niza
-void dodajNaKraj(DinamickiNiz *dn, int vrednost) {
+void dodajNaKraj(DinamickiNiz *dn) {
+    int vrednost;
+    printf("Unesite vrednost: ");
+    scanf("%d", &vrednost);
     if (dn->velicina == dn->kapacitet) {
         prosiriNiz(dn);
     }
@@ -59,16 +60,19 @@ void dodajNaKraj(DinamickiNiz *dn, int vrednost) {
     printf("Dodat element %d na kraj niza.\n", vrednost);
 }
 
-// Dodavanje elementa na zadati indeks
-void dodajNaIndeks(DinamickiNiz *dn, int indeks, int vrednost) {
+void dodajNaIndeks(DinamickiNiz *dn) {
+    int indeks, vrednost;
+    printf("Unesite indeks: ");
+    scanf("%d", &indeks);
     if (indeks < 0 || indeks > dn->velicina) {
-        printf("Greška: indeks %d je van opsega!\n", indeks);
+        printf("Greska: indeks %d je van opsega!\n", indeks);
         return;
     }
+    printf("Unesite vrednost: ");
+    scanf("%d", &vrednost);
     if (dn->velicina == dn->kapacitet) {
         prosiriNiz(dn);
     }
-    // Pomeranje elemenata udesno
     for (int i = dn->velicina; i > indeks; i--) {
         dn->niz[i] = dn->niz[i - 1];
     }
@@ -77,53 +81,52 @@ void dodajNaIndeks(DinamickiNiz *dn, int indeks, int vrednost) {
     printf("Dodat element %d na indeks %d.\n", vrednost, indeks);
 }
 
-// Brisanje elementa na zadatom indeksu
-void obrisiNaIndeksu(DinamickiNiz *dn, int indeks) {
+void obrisiNaIndeksu(DinamickiNiz *dn) {
+    int indeks;
+    printf("Unesite indeks: ");
+    scanf("%d", &indeks);
     if (indeks < 0 || indeks >= dn->velicina) {
-        printf("Greška: indeks %d je van opsega!\n", indeks);
+        printf("Greska: indeks %d je van opsega!\n", indeks);
         return;
     }
     printf("Obrisan element %d sa indeksa %d.\n", dn->niz[indeks], indeks);
-    // Pomeranje elemenata ulevo
     for (int i = indeks; i < dn->velicina - 1; i++) {
         dn->niz[i] = dn->niz[i + 1];
     }
     dn->velicina--;
 }
 
-// Oslobađanje memorije
 void oslobodiNiz(DinamickiNiz *dn) {
     free(dn->niz);
     free(dn);
 }
 
-// --- Glavni program ---
 int main() {
     DinamickiNiz *dn = kreirajNiz();
+    int izbor;
 
-    printf("=== Dodavanje elemenata na kraj ===\n");
-    for (int i = 1; i <= 10; i++) {
-        dodajNaKraj(dn, i * 10);
-    }
-    ispisNiza(dn);
+    do {
+        printf("\n===== MENI =====\n");
+        printf("1. Ispis svih elemenata\n");
+        printf("2. Ispis elementa na indeksu\n");
+        printf("3. Dodaj element na kraj\n");
+        printf("4. Dodaj element na indeks\n");
+        printf("5. Obrisi element na indeksu\n");
+        printf("0. Izlaz\n");
+        printf("Vas izbor: ");
+        scanf("%d", &izbor);
 
-    printf("\n=== Dodavanje još jednog elementa (proširenje) ===\n");
-    dodajNaKraj(dn, 110);
-    ispisNiza(dn);
+        switch (izbor) {
+            case 1: ispisNiza(dn);       break;
+            case 2: ispisElementa(dn);   break;
+            case 3: dodajNaKraj(dn);     break;
+            case 4: dodajNaIndeks(dn);   break;
+            case 5: obrisiNaIndeksu(dn); break;
+            case 0: printf("Izlaz iz programa.\n"); break;
+            default: printf("Nepoznat izbor, pokusajte ponovo.\n");
+        }
 
-    printf("\n=== Ispis elementa na indeksu 3 ===\n");
-    ispisElementa(dn, 3);
-
-    printf("\n=== Dodavanje elementa 99 na indeks 2 ===\n");
-    dodajNaIndeks(dn, 2, 99);
-    ispisNiza(dn);
-
-    printf("\n=== Brisanje elementa na indeksu 5 ===\n");
-    obrisiNaIndeksu(dn, 5);
-    ispisNiza(dn);
-
-    printf("\n=== Ispis elementa van opsega (indeks 100) ===\n");
-    ispisElementa(dn, 100);
+    } while (izbor != 0);
 
     oslobodiNiz(dn);
     return 0;
