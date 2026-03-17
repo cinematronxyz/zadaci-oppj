@@ -25,6 +25,28 @@ void prosiriNiz(DinamickiNiz *dn) {
     printf("Kapacitet niza prosiren na %d elemenata.\n", dn->kapacitet);
 }
 
+void unosPocetnihElemenata(DinamickiNiz *dn) {
+    int n, vrednost;
+    printf("Unesite koliko elemenata zelite da unesete na pocetku (max 10): ");
+    scanf("%d", &n);
+
+    if (n < 0) {
+        printf("Broj elemenata ne moze biti negativan!\n");
+        return;
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (dn->velicina == dn->kapacitet) {
+            prosiriNiz(dn);
+        }
+        printf("Unesite element %d: ", i + 1);
+        scanf("%d", &vrednost);
+        dn->niz[dn->velicina] = vrednost;
+        dn->velicina++;
+    }
+    printf("Uspesno uneto %d elemenata.\n", n);
+}
+
 void ispisNiza(DinamickiNiz *dn) {
     if (dn->velicina == 0) {
         printf("Niz je prazan.\n");
@@ -104,6 +126,11 @@ void oslobodiNiz(DinamickiNiz *dn) {
 int main() {
     DinamickiNiz *dn = kreirajNiz();
     int izbor;
+
+    printf("===== DINAMICKI NIZ =====\n");
+    unosPocetnihElemenata(dn);
+    printf("\nPocetni niz: ");
+    ispisNiza(dn);
 
     do {
         printf("\n===== MENI =====\n");
