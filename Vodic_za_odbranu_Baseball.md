@@ -1,43 +1,4 @@
----
-title: "Vodič za pripremu odbrane — Zadatak \"Baseball\" (jednostruko spregnuta lista)"
-author: "Priprema za predispitne obaveze"
-date: ""
----
-
-# 1. Uvod
-
-Ovaj dokument je kompletan vodič za pripremu **kompajliranja, pokretanja, izmene i usmene odbrane** rešenja zadatka sa jednostruko spregnutom listom (Baseball). Pokriva:
-
-- Predaju rešenja (šta se šalje, kako se potpisuje poruka)
-- Kompajliranje i pokretanje (Windows/MSYS2, Linux)
-- Objašnjenje svake linije koda u `resenje.c` i `lista.c`
-- Osnovne pojmove iz C-a koji se ispituju na odbrani (string, pokazivač, struktura, dinamička memorija)
-- Gotove primere dodatnih funkcija (traženje, filtriranje, računanje) koje se mogu tražiti da se dopišu uživo
-- Najčešća pitanja i odgovore za odbranu
-
----
-
-# 2. Predaja rešenja — PRAVILA (obavezno pročitati)
-
-- Fajl sa rešenjem **mora** da se zove tačno **`resenje.c`** (malim slovima, bez razmaka).
-- `lista.h`, `lista.c` i `Makefile` se **ne šalju** — to je već dato i ne menja se (osim ako profesor eksplicitno ne kaže drugačije).
-- U **samoj poruci** (mejlu/sistemu za predaju), obavezno se potpisati sa:
-  - **Punim imenom i prezimenom**
-  - **Brojem indeksa**
-- Neblagovremeno poslata rešenja se **ne prihvataju**, bez izuzetka (ni uz prijavu ponovnog polaganja).
-
-**Checklist pre slanja:**
-
-- [ ] Fajl se zove tačno `resenje.c`
-- [ ] Kod se uspešno kompajlira sa datim `lista.c`, `lista.h` i `Makefile` (bez izmena tih fajlova)
-- [ ] Testiran je izlaz i poklapa se sa primerom iz teksta zadatka
-- [ ] Nema globalnih promenljivih
-- [ ] Sve je organizovano u funkcije
-- [ ] U poruci je upisano ime, prezime i broj indeksa
-
----
-
-# 3. Struktura projekta
+# 1. Struktura projekta
 
 ```
 projekat/
@@ -68,9 +29,9 @@ void clear(CVOR** glava);
 
 ---
 
-# 4. Kompajliranje i pokretanje
+# 2. Kompajliranje i pokretanje
 
-## 4.1. Preko terminala (preporučeno, radi svuda)
+## 2.1. Preko terminala (preporučeno, radi svuda)
 
 Otvoriti terminal (na Windowsu: **MSYS2 UCRT64**, na Linuxu: obični terminal), pozicionirati se u folder projekta:
 
@@ -107,7 +68,7 @@ pa zatim pokrenuti `a.out` (ili `a.exe`) na isti način kao gore.
 make clean
 ```
 
-## 4.2. Najčešće greške pri kompajliranju
+## 2.2. Najčešće greške pri kompajliranju
 
 | Greška | Uzrok | Rešenje |
 |---|---|---|
@@ -116,7 +77,7 @@ make clean
 | `lista.h: No such file or directory` | Header nije u istom folderu kao `.c` fajlovi | Sve fajlove (`.c`, `.h`) držati u istom folderu |
 | VS Code "build active file" ne radi | Taj podrazumevani task kompajlira samo trenutno otvoreni fajl, a ovde ih ima više | Ne koristiti taj task — koristiti terminal (vidi 4.1) |
 
-## 4.3. Pokretanje sa argumentima komandne linije
+## 2.3. Pokretanje sa argumentima komandne linije
 
 Program se poziva sa **tri argumenta**:
 
@@ -139,7 +100,7 @@ Ako broj argumenata nije tačan (`argc != 4`), program se gasi sa **exit(55)**.
 
 ---
 
-# 5. Očekivano ponašanje i test primer
+# 3. Očekivano ponašanje i test primer
 
 **input.txt:**
 
@@ -194,9 +155,9 @@ Test grešaka:
 
 ---
 
-# 6. Kompletno objašnjenje koda
+# 4. Kompletno objašnjenje koda
 
-## 6.1. `resenje.c` — pregled funkcija
+## 4.1. `resenje.c` — pregled funkcija
 
 ```c
 #include <stdio.h>
@@ -285,7 +246,7 @@ int main(int argc, char* argv[]) {
 - **`clear(&glava)`** oslobađa svu memoriju zauzetu za listu — ovo je **kritično**, jer je memorija zauzeta pomoću `malloc` u `create_node`, pa mora ručno da se oslobodi pomoću `free` (C nema automatsko "garbage collection").
 - Zatvaraju se oba fajla na kraju (`fclose`).
 
-## 6.2. `lista.c` — funkcije koje su već date
+## 4.2. `lista.c` — funkcije koje su već date
 
 ```c
 void init(CVOR** glava) {
@@ -345,7 +306,7 @@ void clear(CVOR** glava) {
 - Prvo se sačuva pokazivač na trenutni čvor (`tmp`), zatim se glava pomeri na sledeći čvor, tek onda se `tmp` oslobađa — ovo je bitno da se ne izgubi pokazivač na ostatak liste pre nego što se on sačuva.
 - Nakon ove funkcije, `*glava` je opet `NULL` (prazna lista), i nema **memorijskih curenja** (memory leak).
 
-## 6.3. Format specifikatori — `%-15s %-15s %d$`
+## 4.3. Format specifikatori — `%-15s %-15s %d$`
 
 | Deo | Značenje |
 |---|---|
@@ -359,9 +320,9 @@ Primer: `"YANKEES"` (7 karaktera) uz `%-15s` postaje `"YANKEES        "` (7 + 8 
 
 ---
 
-# 7. Osnovni pojmovi iz C-a (za usmena pitanja)
+# 5. Osnovni pojmovi iz C-a (za usmena pitanja)
 
-## 7.1. Šta je string u C-u?
+## 5.1. Šta je string u C-u?
 
 String u C-u je **niz karaktera (`char`) koji se završava specijalnim karakterom `'\0'`** (null-terminator, vrednost 0). Ne postoji poseban tip "string" kao u nekim drugim jezicima — to je konvencija: niz `char` elemenata gde poslednji "pravi" karakter prati `'\0'` koji označava kraj.
 
@@ -373,7 +334,7 @@ Funkcije koje rade sa stringovima (iz `<string.h>`):
 - `strcmp(a, b)` — poredi dva stringa (vraća 0 ako su jednaki)
 - `strcat(dest, src)` — nadovezuje `src` na kraj `dest`
 
-## 7.2. Šta je pokazivač (pointer)?
+## 5.2. Šta je pokazivač (pointer)?
 
 Pokazivač je promenljiva koja **čuva adresu** druge promenljive u memoriji, a ne samu vrednost.
 
@@ -390,7 +351,7 @@ printf("%d", *p);  // *p čita VREDNOST na koju p pokazuje (ispisuje 5)
 
 Kada se funkciji prosledi `CVOR** glava`, funkcija može da **promeni samu glavu liste** (npr. da postavi novi prvi čvor). Da je prosleđeno samo `CVOR* glava` (obična kopija pokazivača), izmena unutar funkcije ne bi uticala na promenljivu u `main`-u — jer bi funkcija radila samo sa **kopijom** pokazivača.
 
-## 7.3. Šta je struktura (struct)?
+## 5.3. Šta je struktura (struct)?
 
 Struktura je korisnički definisan tip podataka koji grupiše više različitih polja (koja mogu biti različitog tipa) pod jednim imenom.
 
@@ -408,7 +369,7 @@ Ovde `CVOR` grupiše ime domaćina, gosta, cenu karte i pokazivač na sledeći �
 
 - `struct cvor_st* sledeci` je pokazivač **na istu strukturu** — to je ono što jednu strukturu pretvara u "čvor" liste, jer omogućava lančano povezivanje.
 
-## 7.4. Dinamička alokacija memorije (`malloc`/`free`)
+## 5.4. Dinamička alokacija memorije (`malloc`/`free`)
 
 - `malloc(broj_bajtova)` traži od operativnog sistema komad memorije te veličine na **hipu (heap)** i vraća pokazivač na njega (ili `NULL` ako nema dovoljno memorije).
 - `sizeof(CVOR)` automatski računa koliko bajtova zauzima jedna struktura `CVOR`.
@@ -416,7 +377,7 @@ Ovde `CVOR` grupiše ime domaćina, gosta, cenu karte i pokazivač na sledeći �
 - `free(p)` **oslobađa** memoriju koju je `p` zauzeo — obavezno kad više nije potrebna, inače nastaje **memorijsko curenje (memory leak)**: program troši sve više memorije koju nikad ne vraća sistemu.
 - Nakon `free(p)`, `p` postaje **"dangling pointer"** (pokazuje na oslobođenu memoriju) — ne sme se koristiti dok mu se ponovo ne dodeli nova validna adresa.
 
-## 7.5. Šta je jednostruko spregnuta lista?
+## 5.5. Šta je jednostruko spregnuta lista?
 
 Struktura podataka gde je svaki element (čvor) povezan sa **sledećim** elementom preko pokazivača, ali ne i sa prethodnim (za razliku od dvostruko spregnute liste). Poslednji čvor ima `sledeci == NULL`.
 
@@ -428,7 +389,7 @@ Mane:
 - Nema direktnog pristupa i-tom elementu (mora se ići redom od glave)
 - Zauzima malo više memorije po elementu (zbog pokazivača)
 
-## 7.6. `argc` i `argv`
+## 5.6. `argc` i `argv`
 
 - `argc` (argument count) — broj argumenata prosleđenih programu, **uključujući ime samog programa**.
 - `argv` (argument vector) — niz stringova; `argv[0]` je ime programa, `argv[1]`, `argv[2]`... su stvarni argumenti.
@@ -437,7 +398,7 @@ Za poziv `./a.out input.txt output.txt 6`:
 - `argc` = 4
 - `argv[0]` = `"./a.out"`, `argv[1]` = `"input.txt"`, `argv[2]` = `"output.txt"`, `argv[3]` = `"6"`
 
-## 7.7. Rad sa fajlovima
+## 5.7. Rad sa fajlovima
 
 | Funkcija | Namena |
 |---|---|
@@ -450,11 +411,11 @@ Uvek proveriti da li je `fopen` vratio `NULL` (fajl ne postoji, nema dozvole za 
 
 ---
 
-# 8. Priprema za "dopiši jednu funkciju" na odbrani
+# 6. Priprema za "dopiši jednu funkciju" na odbrani
 
 Na odbrani će se tražiti da se **doda jedna nova funkcija** (traženje/filtriranje/računanje). Ispod su gotovi primeri za sve tri kategorije — logiku treba razumeti, ne samo prepisati, jer će se tražiti *slična*, ne nužno *ista* funkcija.
 
-## 8.1. Primer — TRAŽENJE (pronađi utakmicu po domaćinu)
+## 6.1. Primer — TRAŽENJE (pronađi utakmicu po domaćinu)
 
 ```c
 CVOR* pronadji_po_domacinu(CVOR* glava, char* domacin) {
@@ -479,7 +440,7 @@ if(rezultat != NULL) {
 }
 ```
 
-## 8.2. Primer — FILTRIRANJE (ispiši samo utakmice sa cenom većom od zadate)
+## 6.2. Primer — FILTRIRANJE (ispiši samo utakmice sa cenom većom od zadate)
 
 ```c
 void ispisi_skuplje_od(FILE* izlaz, CVOR* glava, int granica) {
@@ -493,7 +454,7 @@ void ispisi_skuplje_od(FILE* izlaz, CVOR* glava, int granica) {
 }
 ```
 
-## 8.3. Primer — RAČUNANJE (prosečna cena karte svih utakmica)
+## 6.3. Primer — RAČUNANJE (prosečna cena karte svih utakmica)
 
 ```c
 double prosecna_cena(CVOR* glava) {
@@ -512,7 +473,7 @@ double prosecna_cena(CVOR* glava) {
 }
 ```
 
-## 8.4. Primer — RAČUNANJE (najskuplja utakmica — maksimum)
+## 6.4. Primer — RAČUNANJE (najskuplja utakmica — maksimum)
 
 ```c
 CVOR* najskuplja_utakmica(CVOR* glava) {
@@ -531,7 +492,7 @@ CVOR* najskuplja_utakmica(CVOR* glava) {
 }
 ```
 
-## 8.5. Primer — RAČUNANJE (broj čvorova u listi)
+## 6.5. Primer — RAČUNANJE (broj čvorova u listi)
 
 ```c
 int broj_utakmica(CVOR* glava) {
@@ -545,7 +506,7 @@ int broj_utakmica(CVOR* glava) {
 }
 ```
 
-## 8.6. Primer — FILTRIRANJE (utakmice gde je zadati tim domaćin ILI gost)
+## 6.6. Primer — FILTRIRANJE (utakmice gde je zadati tim domaćin ILI gost)
 
 ```c
 void ispisi_utakmice_tima(FILE* izlaz, CVOR* glava, char* tim) {
@@ -559,7 +520,7 @@ void ispisi_utakmice_tima(FILE* izlaz, CVOR* glava, char* tim) {
 }
 ```
 
-## 8.7. Opšti obrazac (koristiti kao "šablon" na odbrani)
+## 6.7. Opšti obrazac (koristiti kao "šablon" na odbrani)
 
 Skoro sve dodatne funkcije nad jednostruko spregnutom listom imaju **isti oblik**:
 
@@ -581,7 +542,7 @@ Ako se ovaj obrazac razume, svaka varijacija (traži po X, filtriraj po Y, izra�
 
 ---
 
-# 9. Najčešća pitanja na odbrani i odgovori
+# 7. Najčešća pitanja na odbrani i odgovori
 
 **P: Kako se dodaje čvor u listu?**
 O: Prvo se pravi novi čvor pomoću `malloc`-a (`create_node`), popune mu se polja, a zatim se poziva `add_to_list` koja: ako je lista prazna postavlja novi čvor za glavu, a inače prolazi kroz listu do poslednjeg čvora (onog sa `sledeci == NULL`) i tamo ga zakači.
@@ -612,16 +573,3 @@ O: `argc` je broj argumenata komandne linije (uključujući ime programa), `argv
 
 **P: Zašto se koristi `atoi`?**
 O: Zato što svi argumenti komandne linije stižu kao stringovi (`char*`), pa je potrebno pretvoriti string (npr. `"6"`) u broj (`int 6`) da bi se mogao koristiti u matematičkoj operaciji.
-
----
-
-# 10. Finalni checklist pred odbranu
-
-- [ ] Znam da kompajliram rešenje iz terminala (gcc ili make) bez VS Code dugmadi
-- [ ] Znam da pokrenem program sa tačnim brojem argumenata i protumačim izlaz
-- [ ] Znam da objasnim svaku liniju u `resenje.c`
-- [ ] Znam da objasnim `init`, `create_node`, `add_to_list`, `clear` iz `lista.c`
-- [ ] Znam šta je string, pokazivač, struktura, dinamička memorija
-- [ ] Mogu da dopišem jednostavnu funkciju za traženje/filtriranje/računanje po šablonu iz sekcije 8
-- [ ] Fajl za predaju se zove tačno `resenje.c`
-- [ ] U poruci za predaju upisano ime, prezime i broj indeksa
