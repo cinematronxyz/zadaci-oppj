@@ -155,5 +155,3 @@ int main(int argc, char* argv[]) {
 2. **Redosled `fclose` u error-handling granama** — svaki put kad izlaziš iz programa, moraš zatvoriti sve fajlove koje si već otvorio, inače curi resurs.
 3. **`%20s` u `fscanf`** — sprečava buffer overflow, verovatno pitanje "šta bi se desilo da nema limita" → odgovor: moguć overflow/undefined behavior ako je ulaz duži od bafera.
 4. **Izlazni kodovi grešaka (55, 66, 8)** — specifični za tvoj zadatak, verovatno propisani od profesora za automatsku proveru.
-
-Ako pošalješ i `lista.h`/`lista.c`, mogu i to da prođem liniju po liniju (posebno `create_node`, `add_to_list`, `init`, `clear` — to su verovatno najvažnija pitanja na odbrani).
